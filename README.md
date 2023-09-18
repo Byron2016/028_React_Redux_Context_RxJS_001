@@ -188,5 +188,98 @@ and the other help that you can find into **Reference** section.
 
 - RxJS
   - npm install rxjs
-  - 
+  - Add subject-manager utilitie.
+    - Add a new class "src/utilities/subject-manager.js" 
+		```js
+			import {Subject} from 'rxjs'
 
+			export class SubjectManager {
+			    subject$ = new Subject()
+
+			    /*
+			    mal
+			    get getSubject(){
+			        return this.subject;
+			        // si lo hacemos de esta forma dejamos 			abierto para enviar y recibir información.
+			        // rompiendo el principio de encapculación 			por que podemos hacer al llamarlo
+			        // this.subject.next(true) //este .next es 			para enviar información.
+
+			    }
+			    */
+		   
+			    // bien
+			    getSubject(){
+			        return this.subject$.asObservable();
+			        /*
+			            entonces en donde invocamos si hacemos
+			            const unicast = this.subjectasObservable			();
+			            unicast.   YA NO ME DA LA OPCIÓN DE NEXT
+			        */
+			    }
+
+			    setSubject(value){
+			        this.subject$.next(value);
+			    }
+			}
+
+			//It is a good practice to add a "$" symbol to an any variable that is async.
+		````
+
+		- It is a good practice to add a "$" symbol to an any variable that is async.
+
+
+  - Add sharing-information.service service.
+    - Add a new file "src/services/sharing-information.service.js" 
+		```js
+			import { SubjectManager } from "../utilities/			subject-manager";
+
+			export const sharingInformationService = new 			SubjectManager();
+		````
+
+	- With this construccion outside of components always are going to access to the same information, same data.	
+
+  - Modify Componente1 and Component2
+    - Component1
+		```js
+		import {sharingInformationService} from "../../services/sharing-information.service"
+
+		function Component1() {
+		  const handleClick = () => {
+		    sharingInformationService.setSubject("Hola")
+		  }
+
+		  return (
+		    <div>
+		      <button onClick={handleClick}>
+		        Enviar información
+		      </button>
+		    </div>
+		  )
+		}
+
+		export default Component1
+		````
+
+    - Component2
+		```js
+		import { useEffect } from "react"
+		import {sharingInformationService} from "../../		services/sharing-information.service"
+
+		function Component2() {
+		  const subscription$ = sharingInformationService.		getSubject()
+
+		  useEffect(() => {
+		    subscription$.subscribe(data => {
+		      console.log(data);
+		    })
+		  })
+		  return (
+		    <div>Component2</div>
+		  )
+		}
+
+		export default Component2
+		````
+	- With that step you already share data between components.
+
+  - 

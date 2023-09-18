@@ -7,8 +7,8 @@ function Component2() {
   const subscription$ = sharingInformationService.getSubject()
 
   useEffect(() => {
-    subscription$.subscribe(() => {
-      setCount(count + 1)
+    subscription$.subscribe((data) => {
+      if(!!data) setCount(count + 1)
     })
   })
   return (

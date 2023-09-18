@@ -5,10 +5,17 @@ function Component1() {
     sharingInformationService.setSubject(true)
   }
 
+  const handleClickNO = () => {
+    sharingInformationService.setSubject(false)
+  }
+
   return (
     <div>
       <button onClick={handleClick}>
         Enviar información
+      </button>
+      <button onClick={handleClickNO}>
+        NO Enviar información
       </button>
     </div>
   )

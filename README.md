@@ -165,30 +165,31 @@ and the other help that you can find into **Reference** section.
     - **Context**: Share information between components that **belongs to the same  view** into the same page.
     - **RxJS**: Share information between componentes but for simple **events** ex: open modal, click a button, to communicate that something has happened.
 
-- Create two componentes 
-  - Using plugging "rfce"
-    - components/RxJS/Component1.jsx
-    - components/RxJS/Component2.jsx
-
-- Add componentes to App.jsx
-	```js
-	import Component1 from './components/RxJS/Component1'
-	import Component2 from './components/RxJS/Component2'	
-	function App() {
-	  return (
-	    <>
-	      <div>
-	        <Component1/>
-	        <Component2/>
-	      </div>
-	    </>
-	  )
-	}
-	````
-
 - RxJS
-  - npm install rxjs
-  - Add subject-manager utilitie.
+	- Create two componentes 
+	  - Using plugging "rfce"
+	    - components/RxJS/Component1.jsx
+	    - components/RxJS/Component2.jsx
+
+	- Add componentes to App.jsx
+		```js
+		import Component1 from './components/RxJS/Component1'
+		import Component2 from './components/RxJS/Component2'	
+		function App() {
+		  return (
+		    <>
+		      <div>
+		        <Component1/>
+		        <Component2/>
+		      </div>
+		    </>
+		  )
+		}
+		````
+
+
+    - npm install rxjs
+    - Add subject-manager utilitie.
     - Add a new class "src/utilities/subject-manager.js" 
 		```js
 			import {Subject} from 'rxjs'
@@ -211,8 +212,7 @@ and the other help that you can find into **Reference** section.
 			    getSubject(){
 			        return this.subject$.asObservable();
 			        /*
-			            entonces en donde invocamos si hacemos
-			            const unicast = this.subjectasObservable();
+			            entonces en donde invocamos si hacemos const unicast = this.subjectasObservable();
 			            unicast. YA NO ME DA LA OPCIÓN DE NEXT
 			        */
 			    }
@@ -313,6 +313,59 @@ and the other help that you can find into **Reference** section.
 			  useEffect(() => {
 			    subscription$.subscribe(() => {
 			      setCount(count + 1)
+			    })
+			  })
+			  return (
+			    <div>Component2 {count}</div>
+			  )
+			}
+
+			export default Component2
+			````
+
+  - Add a new Button and control it with an "event**
+	  - Modify Componente1 and Component2
+	    - Component1
+			```js
+			....
+
+			function Component1() {
+			  const handleClick = () => {
+			    sharingInformationService.setSubject(true)
+			  }
+
+			  const handleClickNO = () => {
+			    sharingInformationService.setSubject(true)
+			  }
+
+			  ....
+
+			  return (
+			    <div>
+			      <button onClick={handleClick}>
+			        Enviar información
+			      </button>
+			      <button onClick={handleClickNO}>
+			        NO Enviar información
+			      </button>
+			    </div>
+			  )
+			}
+
+			export default Component1
+			````
+	    - Component2
+			```js
+			import { useEffect, useState } from "react"
+			....
+
+			function Component2() {
+			  const [count, setCount] = useState(0)
+			  ....
+
+			  useEffect(() => {
+			    subscription$.subscribe(data => {
+			      if(!!data) setCount(count + 1)
 			    })
 			  })
 			  return (

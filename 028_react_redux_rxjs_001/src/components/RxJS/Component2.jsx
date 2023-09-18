@@ -1,16 +1,18 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import {sharingInformationService} from "../../services/sharing-information.service"
 
 function Component2() {
+  const [count, setCount] = useState(0)
+
   const subscription$ = sharingInformationService.getSubject()
 
   useEffect(() => {
-    subscription$.subscribe(data => {
-      console.log(data);
+    subscription$.subscribe(() => {
+      setCount(count + 1)
     })
   })
   return (
-    <div>Component2</div>
+    <div>Component2: {count}</div>
   )
 }
 

@@ -200,9 +200,9 @@ and the other help that you can find into **Reference** section.
 			    mal
 			    get getSubject(){
 			        return this.subject;
-			        // si lo hacemos de esta forma dejamos 			abierto para enviar y recibir información.
-			        // rompiendo el principio de encapculación 			por que podemos hacer al llamarlo
-			        // this.subject.next(true) //este .next es 			para enviar información.
+			        // si lo hacemos de esta forma dejamos abierto para enviar y recibir información.
+			        // rompiendo el principio de encapculación por que podemos hacer al llamarlo
+			        // this.subject.next(true) //este .next es para enviar información.
 
 			    }
 			    */
@@ -212,8 +212,8 @@ and the other help that you can find into **Reference** section.
 			        return this.subject$.asObservable();
 			        /*
 			            entonces en donde invocamos si hacemos
-			            const unicast = this.subjectasObservable			();
-			            unicast.   YA NO ME DA LA OPCIÓN DE NEXT
+			            const unicast = this.subjectasObservable();
+			            unicast. YA NO ME DA LA OPCIÓN DE NEXT
 			        */
 			    }
 
@@ -231,9 +231,9 @@ and the other help that you can find into **Reference** section.
   - Add sharing-information.service service.
     - Add a new file "src/services/sharing-information.service.js" 
 		```js
-			import { SubjectManager } from "../utilities/			subject-manager";
+			import { SubjectManager } from "../utilities/subject-manager";
 
-			export const sharingInformationService = new 			SubjectManager();
+			export const sharingInformationService = new SubjectManager();
 		````
 
 	- With this construccion outside of components always are going to access to the same information, same data.	
@@ -263,10 +263,10 @@ and the other help that you can find into **Reference** section.
     - Component2
 		```js
 		import { useEffect } from "react"
-		import {sharingInformationService} from "../../		services/sharing-information.service"
+		import {sharingInformationService} from "../../services/sharing-information.service"
 
 		function Component2() {
-		  const subscription$ = sharingInformationService.		getSubject()
+		  const subscription$ = sharingInformationService.getSubject()
 
 		  useEffect(() => {
 		    subscription$.subscribe(data => {
@@ -281,5 +281,44 @@ and the other help that you can find into **Reference** section.
 		export default Component2
 		````
 	- With that step you already share data between components.
+	- It is important that check in main.jsx has not **React.StrictMode**
+    	- **React.StrictMode** kill and upload again a component.
 
-  - 
+  - Configure like a **event**
+	  - Modify Componente1 and Component2
+	    - Component1
+			```js
+			....
+
+			function Component1() {
+			  const handleClick = () => {
+			    sharingInformationService.setSubject(true)
+			  }
+
+			  ....
+			}
+
+			export default Component1
+			````
+
+	    - Component2
+			```js
+			import { useEffect, useState } from "react"
+			....
+
+			function Component2() {
+			  const [count, setCount] = useState(0)
+			  ....
+
+			  useEffect(() => {
+			    subscription$.subscribe(() => {
+			      setCount(count + 1)
+			    })
+			  })
+			  return (
+			    <div>Component2 {count}</div>
+			  )
+			}
+
+			export default Component2
+			````

@@ -2,7 +2,7 @@ import {sharingInformationService} from "../../services/sharing-information.serv
 
 function Component1() {
   const handleClick = () => {
-    sharingInformationService.setSubject("Hola")
+    sharingInformationService.setSubject(true)
   }
 
   return (

@@ -61,6 +61,9 @@ and the other help that you can find into **Reference** section.
 
 - Redux
   - [¿Qué es Redux? - Redux en menos de 5 Minutos (Redux Toolkit)](https://www.youtube.com/watch?v=j-jzI3wkkVk)
+  - 
+- RxJS
+  - [RxJS](https://rxjs.dev/guide/overview)
 
 [⏪(Back to top)](#table-of-contents)
 
@@ -151,4 +154,39 @@ and the other help that you can find into **Reference** section.
 		- 028_React_Redux_Context_RxJS_001
 		- Reactjs
 		- TypeScript
+	- Paquetes del VSC
+      - Auto Barrel (Mike Hanson)
+      - VS Code ES7+ React/Redux/React-Native/JS snippets (dsznajder)
+      - React Create Component (Javier Gutierrez)
+
+- Estructure
+  - When to use each one
+    - **Redux**: All that you use at application level, what it is shared in all  application. We name it **entity** ex: shopping car.
+    - **Context**: Share information between components that **belongs to the same  view** into the same page.
+    - **RxJS**: Share information between componentes but for simple **events** ex: open modal, click a button, to communicate that something has happened.
+
+- Create two componentes 
+  - Using plugging "rfce"
+    - components/RxJS/Component1.jsx
+    - components/RxJS/Component2.jsx
+
+- Add componentes to App.jsx
+	```js
+	import Component1 from './components/RxJS/Component1'
+	import Component2 from './components/RxJS/Component2'	
+	function App() {
+	  return (
+	    <>
+	      <div>
+	        <Component1/>
+	        <Component2/>
+	      </div>
+	    </>
+	  )
+	}
+	````
+
+- RxJS
+  - npm install rxjs
+  - 
 

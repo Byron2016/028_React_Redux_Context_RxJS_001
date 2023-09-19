@@ -486,7 +486,7 @@ and the other help that you can find into **Reference** section.
 							export const useGentlemanContext = () => {
 							    const context = useContext(GentlemanContext);
 							    if(context === undefined){
-							        throw new Error('GentlemanContext must be used within a 	GlentemanProvider')
+							        throw new Error('GentlemanContext must be used within a GlentemanProvider')
 							    }
 
 							    return context;

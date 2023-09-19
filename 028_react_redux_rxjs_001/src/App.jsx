@@ -3,6 +3,7 @@ import Component1 from './components/RxJS/Component1'
 import Component2 from './components/RxJS/Component2'
 import Gentleman from './pages/Gentleman/Gentleman'
 import Home from './pages/Home/Home'
+import About from './pages/About/About'
 
 function App() {
   return (
@@ -16,6 +17,10 @@ function App() {
         <div className='para_context'>
           <h2>Context</h2>
           <Gentleman/>
+          <h2>Home</h2>
+          <Home/>
+          <h2>About</h2>
+          <About/>
         </div>
       </div>
     </>

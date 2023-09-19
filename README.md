@@ -153,7 +153,7 @@ and the other help that you can find into **Reference** section.
 	- npm create vite@latest
 		- 028_React_Redux_Context_RxJS_001
 		- Reactjs
-		- TypeScript
+		- JavaScript
 	- Paquetes del VSC
       - Auto Barrel (Mike Hanson)
       - VS Code ES7+ React/Redux/React-Native/JS snippets (dsznajder)
@@ -375,3 +375,173 @@ and the other help that you can find into **Reference** section.
 
 			export default Component2
 			````
+	  - **Note:** doble ! (!!data) means
+    	  - It is instead of the use a string for validate something inside an if.
+    	  - It returns the boolean asociation of a value
+    	  - '', 0, undefine, null -> false
+    	  - any other thing -> true
+
+- Context
+	- Create two components at pages label
+	  - Using plugging "rfce"
+	    - pages/Gentleman/components/ComponentContex1.jsx
+	    - pages/Gentleman/components/ComponentContex1.jsx
+
+	- Create a page 
+	  - Using plugging "rfce"
+	    - pages/Gentleman.jsx
+
+		```js
+			import ComponentContext1 from "./components/ComponentContext1"
+			import ComponentContext2 from "./components/ComponentContext2"
+
+			function Gentleman() {
+			  return (
+			    <div>
+			        <ComponentContext1/>
+			        <ComponentContext2/>
+			    </div>
+			  )
+			}
+
+			export default Gentleman
+		````
+	- Create a Provider
+	  - A **Context** needs a **Provider** that wrap all elements that are going to share information.
+	  - Form number 1, this form is the simple way and is better does not use it.
+		- Step 1: Define createContext
+			```js
+			import { createContext, useState } from "react"
+			....
+
+			function Gentleman() {
+			  const [gentlemanContextValue, SetgentlemanContextValue] = useState('');
+
+			  const context = createContext({
+			    gentlemanContextValue: "",
+			    SetgentlemanContextValue: () => {},
+			  });
+
+			  ....
+			}
+
+			export default Gentleman
+			````
+		- Step 2: Define createContext
+    		- Create a context ouside function.
+        		- Create context pages/Gentleman/context/gentlemen.context.js
+				```js
+					import { createContext } from "react";
+
+					export const GentlemanContext = createContext();
+				````
+			- Import gentleman.context inside Gentleman page.
+				```js
+					import { useState, useContext } from "react"
+					import ComponentContext1 from "./components/ComponentContext1"
+					import ComponentContext2 from "./components/ComponentContext2"
+					import { GentlemanContext } from "./context/gentleman.context";
+
+					function Gentleman() {
+					  const [gentlemanContextValue, SetGentlemanContextValue] = useState(''); // must be outside
+
+					  const Gentleman_Context = useContext(GentlemanContext); // must be outside
+
+					  return (
+					    <div>
+					      <Gentleman_Context.Provider value={{gentlemanContextValue, SetGentlemanContextValue}}>
+					        <ComponentContext1/>
+					        <ComponentContext2/>
+					      </Gentleman_Context.Provider>
+					    </div>
+					  )
+					}
+				````
+
+			- Move outside logic to do it more clean and create provider inside Gentleman.context file.
+    			- Inside context folder.
+        			- Update context pages/Gentleman/context/gentlemen.context.js, moving logic from "Gentleman.jsx" to this file.
+            			- useState and Context.Provider.
+						```js
+							import { createContext,   useState } from "react";
+
+							export const GentlemanContext = createContext();
+							
+							export const GentlemanProvider = ({ children }) => {
+							    const [gentlemanContextValue, setGentlemanContextValue] = useState('');
+							
+							    return (
+							        <GentlemanContext.Provider value={{gentlemanContextValue, 	setGentlemanContextValue}}>
+							            { children}
+							        </GentlemanContext.Provider>
+							    )
+							}
+						````
+    				- Create useGentlemanContext.
+            			- useState and Context.Provider.
+						```js
+							import { useContext } from "react";
+							import { GentlemanContext } from "./gentleman.context";
+
+							export const useGentlemanContext = () => {
+							    const context = useContext(GentlemanContext);
+							    if(context === undefined){
+							        throw new Error('GentlemanContext must be used within a 	GlentemanProvider')
+							    }
+
+							    return context;
+							}
+						````
+
+	- Update Componentes and Gentleman.jsx
+	  - ComponentsContext1
+		```js
+			import {  useGentlemanContext } from '../context/useGentlemanContext.context'
+
+			function ComponentContext1() {
+			  const {setGentlemanContextValue}  = useGentlemanContext()
+
+			  const handleClick = () => {
+			    setGentlemanContextValue('Hola desde componentContext1')
+			  }
+
+			  return (
+			    <div><button onClick={handleClick}>Enviar información por un context</button></div>
+			  )
+			}
+
+			export default ComponentContext1
+		```
+
+	  - ComponentsContext2
+		```js
+			import {  useGentlemanContext } from '../context/useGentlemanContext.context'
+
+			function ComponentContext2() {
+			  const {gentlemanContextValue}  = useGentlemanContext()
+			  return (
+			    <div>El valor enviado desde ComponenteContext1 es : {gentlemanContextValue} </div>
+			  )
+			}
+
+			export default ComponentContext2
+		```
+	  - Gentleman.jsx
+		```js
+			import ComponentContext1 from "./components/ComponentContext1"
+			import ComponentContext2 from "./components/ComponentContext2"
+			import { GentlemanProvider } from "./context/gentleman.context";
+			
+			function Gentleman() {
+			  return (
+			    <div>
+			      <GentlemanProvider>
+			        <ComponentContext1/>
+			        <ComponentContext2/>
+			      </GentlemanProvider>
+			    </div>
+			  )
+			}
+			
+			export default Gentleman
+		```
